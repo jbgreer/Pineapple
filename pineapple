@@ -1,0 +1,11 @@
+#!/bin/sh
+
+container run \
+  --internal \
+  --interactive \
+  --tty \
+  --volume "~/.pi:/home/pineapple/.pi""
+  --volume "$(pwd):/workspace" \
+  pineapple \
+  "$@"
+
