@@ -1,10 +1,10 @@
 #!/bin/sh
 
 container run \
-  --internal \
   --interactive \
+  --memory 1G \
   --tty \
-  --volume "~/.pi:/home/pineapple/.pi""
+  --volume "~/.pi:/home/pineapple/.pi" \
   --volume "$(pwd):/workspace" \
   pineapple \
   "$@"
