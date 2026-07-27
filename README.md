@@ -13,7 +13,7 @@ An example running [pi coding agent](https://pi.dev) inside an [Apple Container]
 2) Build the container image
 
    ```text
-   container build --memory 4g --tag pineapple --file .devcontainer/Containerfile
+   container build --memory 4g --tag pineapple --file Pineapple-Containerfile
    ```
 
 
