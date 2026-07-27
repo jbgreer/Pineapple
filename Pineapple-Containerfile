@@ -17,17 +17,28 @@ ENV TZ="$TZ" \
 RUN << EOF
   apt-get -qq update 
   apt-get -qq -y --no-install-recommends install \
+    aggregate \
+    bind9-dnsutils \
     ca-certificates \
+    curl \
     git \
     iproute2 \
+    ipset \
+    iptables \
+    jq \
     locales \
     neovim \
-    ripgrep
+    sudo \
+    ripgrep \
+    rlwrap
   apt-get -qq clean
   rm -rf /var/lib/apt/lists/*
   sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen 
   locale-gen
 EOF
+
+# to support firewall on run
+COPY init-firewall.sh entrypoint.sh /usr/local/bin/
 
 # node:26 ships with a 'node' user/group at UID/GID 1000
 # remove user and group and create pineapple with same id's
@@ -43,6 +54,9 @@ RUN << EOF
   chown -R ${USERNAME} /command-history
   mkdir -p /workspace /home/${USERNAME}/.pi 
   chown -R ${USERNAME}:${USERNAME} /workspace /home/${USERNAME}/.pi
+  chmod 0555 /usr/local/bin/entrypoint.sh
+  chmod 0500 /usr/local/bin/init-firewall.sh
+  echo "${USERNAME}  ALL = NOPASSWD: /usr/local/bin/init-firewall.sh" >> /etc/sudoers
 EOF
 
 RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
@@ -50,6 +64,4 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 USER ${USERNAME}
 WORKDIR /workspace
 
-# ENTRYPOINT ["/bin/bash"]
-ENTRYPOINT ["/usr/local/bin/pi"]
-
+CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi"]
