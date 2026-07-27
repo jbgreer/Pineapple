@@ -1,11 +1,18 @@
-#!/bin/sh
+#!/bin/bash
+
+set -uexo
+
+CONTAINER_MEM="${CONTAINER_MEM:-1G}"
+HOST_PI_CONFIG_DIR=${HOST_PI_CONFIG_DIR:-~/.pi}
+HOST_WORK_DIR="${HOST_WORK_DIR:-$PWD}"
+IMAGE_TAG=${IMAGE_TAG:-pineapple}
 
 container run \
+  --memory $CONTAINER_MEM \
   --interactive \
-  --memory 1G \
   --tty \
-  --volume "~/.pi:/home/pineapple/.pi" \
-  --volume "$(pwd):/workspace" \
-  pineapple \
+  --volume "$HOST_PI_CONFIG_DIR:/home/pineapple/.pi" \
+  --volume "$HOST_WORK_DIR:/workspace" \
+  $IMAGE_TAG \
   "$@"
 
