@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -uexo
 
 CONTAINER_MEM="${CONTAINER_MEM:-1G}"
@@ -8,6 +7,7 @@ HOST_WORK_DIR="${HOST_WORK_DIR:-$PWD}"
 IMAGE_TAG=${IMAGE_TAG:-pineapple}
 
 container run \
+  --cap-add CAP_NET_ADMIN \
   --memory $CONTAINER_MEM \
   --interactive \
   --tty \
