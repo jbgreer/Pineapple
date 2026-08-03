@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+
+
+def build_container(file, tag):
+  os.system(f'container build --file {file} --tag {tag}')
+
+
+if __name__ == "__main__":
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-f", "--file", help="name of container file")
+  parser.add_argument("-t", "--tag", help="tag for created image")
+  args = parser.parse_args()
+  if args.file == None:
+    args.file = "Pineapple-Base-Containerfile"
+  if args.tag == None:
+    args.tag = "pineapple-base"
+  build_container(args.file, args.tag)

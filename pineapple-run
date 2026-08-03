@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+
+
+def run_container(cpu, mem, pcd, hwd, image):
+  os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} -v {hwd} {image}')
+
+
+if __name__ == "__main__":
+  parser = argparse.ArgumentParser()
+  parser.add_argument("-c", "--cpus", type=int, help="number of cpus for container")
+  parser.add_argument("-m", "--memory", help="memory for container")
+  parser.add_argument("-p", "--pi_config_dir", help="pi configuration directory")
+  parser.add_argument("-w", "--host_work_dir", help="host work directory")
+  parser.add_argument("-i", "--image", help="image tag")
+  args = parser.parse_args()
+  if args.cpus == None:
+    args.cpus = 1
+  if args.memory == None:
+    args.memory = "1G"
+  if args.image == None:
+    args.image = "pineapple-base"
+  if args.pi_config_dir == None:
+    args.pi_config_dir = "~/.pi:/home/pineapple/.pi"
+  if args.host_work_dir == None:
+    args.host_work_dir = ".:/workspace"
+  run_container(args.cpus, args.memory, args.pi_config_dir, args.host_work_dir, args.image)
+
+#!/bin/bash
+#set -uexo
+
+#CONTAINER_MEM="${CONTAINER_MEM:-1G}"
+#HOST_PI_CONFIG_DIR=${HOST_PI_CONFIG_DIR:-~/.pi}
+#HOST_WORK_DIR="${HOST_WORK_DIR:-$PWD}"
+#IMAGE_TAG=${IMAGE_TAG:-pineapple-base}
+
+#container run \
+  #--cap-add CAP_NET_ADMIN \
+  #--memory $CONTAINER_MEM \
+  #--interactive \
+  #--tty \
+  #--volume "$HOST_PI_CONFIG_DIR:/home/pineapple/.pi" \
+  #--volume "$HOST_WORK_DIR:/workspace" \
+  #$IMAGE_TAG \
+  #"$@"
+

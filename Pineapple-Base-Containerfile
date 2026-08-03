@@ -14,14 +14,18 @@ ENV TZ="$TZ" \
   DEVCONTAINER=true \
   PATH=/home/${USERNAME}/.local/bin:${PATH}
 
+# Debian package installation
 RUN << EOF
-  apt-get -qq update 
-  apt-get -qq -y --no-install-recommends install \
+  /usr/bin/apt-get -qq update 
+  /usr/bin/apt-get -qq -y --no-install-recommends install \
     aggregate \
+    apt-transport-https \
     bind9-dnsutils \
     ca-certificates \
     curl \
+    fd-find \
     git \
+    gpg \
     iproute2 \
     ipset \
     iptables \
@@ -30,12 +34,22 @@ RUN << EOF
     neovim \
     sudo \
     ripgrep \
-    rlwrap
-  apt-get -qq clean
-  rm -rf /var/lib/apt/lists/*
-  sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen 
-  locale-gen
+    rlwrap \
+    unzip \
+    wget
+  /usr/bin/apt-get -qq clean
+  /bin/rm -rf /var/lib/apt/lists/*
+  /bin/sed -i '/en_US.UTF-8/s/^# //' /etc/locale.gen 
+  /usr/sbin/locale-gen
 EOF
+
+# Temurin 25 JDK installation
+#RUN << EOF
+  #wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null
+  #echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list 
+  #/usr/bin/apt-get -qq update 
+  #/usr/bin/apt-get -qq -y --no-install-recommends install temurin-25-jdk
+#EOF
 
 # to support firewall on run
 COPY init-firewall.sh entrypoint.sh /usr/local/bin/
