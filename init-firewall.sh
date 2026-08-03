@@ -118,6 +118,9 @@ iptables -A OUTPUT -m set --match-set allowed-domains dst -j ACCEPT
 # Explicitly REJECT all other outbound traffic for immediate feedback
 iptables -A OUTPUT -j REJECT --reject-with icmp-admin-prohibited
 
+# List all iptables rules
+iptables --list --verbose
+
 echo "Firewall configuration complete"
 echo "Verifying firewall rules..."
 if curl --connect-timeout 5 https://www.foo.com >/dev/null 2>&1; then
@@ -134,3 +137,4 @@ if ! curl --connect-timeout 5 https://api.github.com/zen >/dev/null 2>&1; then
 else
   echo "Firewall verification passed - able to reach https://api.github.com as expected"
 fi
+

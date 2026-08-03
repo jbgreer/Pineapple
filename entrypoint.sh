@@ -6,4 +6,5 @@ set -euo pipefail
 # refuse to start so we never run without network restrictions.
 sudo /usr/local/bin/init-firewall.sh
 
+echo "** $@ ***"
 exec "$@"
