@@ -82,6 +82,11 @@ RUN << EOF
   rm -rf parinfer-rust
 EOF
 
+# Install cljfmt 
+RUN << EOF
+  clj -Ttools install io.github.weavejester/cljfmt '{:git/tag "0.16.5"}' :as cljfmt
+EOF
+
 WORKDIR /workspace
 
 #CMD ["/usr/local/bin/entrypoint.sh","/usr/bin/bash"]
