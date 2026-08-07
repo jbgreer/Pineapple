@@ -9,8 +9,8 @@ HOST_WORK_DIR="."
 CONTAINER_PI_WORK_DIR="/workspace"
 
 def run_container(cpu, mem, pcd, hwd, image):
-  #os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} -v {hwd} {image}')
-  os.system(f'container run --read-only --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} --read-only-path {HOST_PI_CONFIG_DIR} -v {hwd} {image}')
+  os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} -v {hwd} {image}')
+  #os.system(f'container run --read-only --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} --read-only-path {HOST_PI_CONFIG_DIR} -v {hwd} {image}')
 
 
 if __name__ == "__main__":

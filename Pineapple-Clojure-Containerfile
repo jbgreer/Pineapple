@@ -7,14 +7,6 @@ ARG USERNAME=pineapple
 # Need to explicitly set to root because of base
 USER root
 
-# Install Rust. Required for parinfer-rust.
-RUN << EOF
-  /usr/bin/apt-get -qq update 
-  /usr/bin/apt-get -qq -y --no-install-recommends install \
-    cargo \
-    ssh
-EOF
-
 # Install Temurin 25 JDK, headless JRE, and maven
 RUN << EOF
   wget -qO - https://packages.adoptium.net/artifactory/api/gpg/key/public | gpg --dearmor | tee /etc/apt/trusted.gpg.d/adoptium.gpg > /dev/null
@@ -37,14 +29,6 @@ RUN << EOF
   rm -r linux-install.sh
 EOF
 
-# Install clj-lsp
-RUN  << EOF
-  curl -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install
-  /bin/chmod +x ./install
-  ./install --dir /home/${USERNAME}/.local/bin
-  rm -f install
-EOF
-
 # Install clj-kondo
 RUN << EOF
   /usr/bin/curl -sLO https://raw.githubusercontent.com/clj-kondo/clj-kondo/master/script/install-clj-kondo
@@ -61,28 +45,9 @@ RUN << EOF
   rm -f install
 EOF
 
-# Install bbin
+# Install pi-clojure locally
 RUN << EOF
-  /usr/bin/curl -sLO https://raw.githubusercontent.com/babashka/bbin/v0.2.5/bbin
-  mv bbin /home/${USERNAME}/.local/bin/bbin
-  chmod +x /home/${USERNAME}/.local/bin/bbin
-EOF
-
-# Install clojure-mcp-light
-RUN << EOF
-  bbin install https://github.com/bhauman/clojure-mcp-light.git --tag v0.2.2
-  bbin install https://github.com/bhauman/clojure-mcp-light.git --tag v0.2.2 --as clj-nrepl-eval --main-opts '["-m" "clojure-mcp-light.nrepl-eval"]'
-  bbin install https://github.com/bhauman/clojure-mcp-light.git --tag v0.2.2 --as clj-paren-repair --main-opts '["-m" "clojure-mcp-light.paren-repair"]'
-EOF
-
-# Install parinfer-rust
-RUN << EOF
-  git clone https://github.com/eraserhd/parinfer-rust.git
-  cd parinfer-rust
-  cargo build --release
-  cargo install --path . --root /home/${USERNAME}/.local
-  cd ..
-  rm -rf parinfer-rust
+  pi install npm:pi-clojure
 EOF
 
 # Install cljfmt 
@@ -93,4 +58,4 @@ EOF
 WORKDIR /workspace
 
 #CMD ["/usr/local/bin/entrypoint.sh","/usr/bin/bash"]
-CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi"]
+CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]

@@ -71,4 +71,4 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 USER ${USERNAME}
 WORKDIR /workspace
 
-CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi"]
+CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]
