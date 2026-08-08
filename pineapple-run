@@ -3,21 +3,17 @@
 import argparse
 import os
 
-HOST_PI_CONFIG_DIR="~/.pi"
-CONTAINER_PI_CONFIG_DIR="/home/pineapple/.pi"
 HOST_WORK_DIR="."
 CONTAINER_PI_WORK_DIR="/workspace"
 
-def run_container(cpu, mem, pcd, hwd, image):
-  os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} -v {hwd} {image}')
-  #os.system(f'container run --read-only --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {pcd} --read-only-path {HOST_PI_CONFIG_DIR} -v {hwd} {image}')
+def run_container(cpu, mem, hwd, image):
+  os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {hwd} {image}')
 
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("-c", "--cpus", type=int, help="number of cpus for container")
   parser.add_argument("-m", "--memory", help="memory for container")
-  parser.add_argument("-p", "--pi_config_dir", help="pi configuration directory")
   parser.add_argument("-w", "--host_work_dir", help="host work directory")
   parser.add_argument("-i", "--image", help="image tag")
   args = parser.parse_args()
@@ -29,11 +25,8 @@ if __name__ == "__main__":
     args.memory = "1G"
   if args.image == None:
     args.image = "pineapple-base"
-  if args.pi_config_dir == None:
-    #args.pi_config_dir = "~/.pi:/home/pineapple/.pi"
-    args.pi_config_dir = HOST_PI_CONFIG_DIR + ":" + CONTAINER_PI_CONFIG_DIR
   if args.host_work_dir == None:
     #args.host_work_dir = ".:/workspace"
     args.host_work_dir = HOST_WORK_DIR + ":" + CONTAINER_PI_WORK_DIR
-  run_container(args.cpus, args.memory, args.pi_config_dir, args.host_work_dir, args.image)
+  run_container(args.cpus, args.memory, args.host_work_dir, args.image)
 

@@ -45,7 +45,7 @@ RUN << EOF
   rm -f install
 EOF
 
-# Install pi-clojure locally
+# Install pi packages: pi-clojure
 RUN << EOF
   /usr/local/bin/pi install npm:pi-clojure
 EOF
@@ -57,5 +57,5 @@ EOF
 
 WORKDIR /workspace
 
-#CMD ["/usr/local/bin/entrypoint.sh","/usr/bin/bash"]
+# CMD ["/usr/local/bin/entrypoint.sh","/usr/bin/bash"]
 CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]

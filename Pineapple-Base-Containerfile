@@ -66,8 +66,12 @@ RUN << EOF
   echo "${USERNAME}  ALL = NOPASSWD: /usr/local/bin/init-firewall.sh" >> /etc/sudoers
 EOF
 
-# Install Pi Coding Agent
-RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+# Install Pi Coding Agent 
+# Install pi-local-models package, supports project level model url
+RUN << EOF
+  npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+  /usr/local/bin/pi install npm:pi-local-models
+EOF
 
 USER ${USERNAME}
 WORKDIR /workspace
