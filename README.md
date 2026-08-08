@@ -4,6 +4,13 @@ An example running [Pi agent harness](https://pi.dev) inside an [Apple Container
 An uncommon feature: this sets firewall rules inside the container.
 This used to 'just work', but now requires setting a capability.
 
+This relies on project-level configure and specifically does not 
+mount the host .pi direct as a configuration directory.  Curiously,
+out-of-the-box pi does not support a project level model.json.
+I'm relying on pi-local-models package.
+For the included Clojure example I have switched from clojure-mcp-light
+to the pi-clojure package, just cause I wanted to - don't read anything into it.
+
 ## Prerequisites
 
 [Apple Container](https://github.com/apple/container)
@@ -48,7 +55,6 @@ This used to 'just work', but now requires setting a capability.
      --cap-add CAP_NET_ADMIN \
      -c {cpus} -m {mem} \
      -i -t \
-     -v {pcd} 
      -v {hwd} \
      {image}
    ```
