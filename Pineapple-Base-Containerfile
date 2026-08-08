@@ -20,6 +20,7 @@ RUN << EOF
   /usr/bin/apt-get -qq -y --no-install-recommends install \
     aggregate \
     apt-transport-https \
+    bash \
     bind9-dnsutils \
     ca-certificates \
     curl \
