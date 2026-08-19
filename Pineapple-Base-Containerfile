@@ -67,13 +67,21 @@ RUN << EOF
 EOF
 
 # Install Pi Coding Agent 
-RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+RUN << EOF
+  npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+  /usr/local/bin/pi update
+  /usr/local/bin/pi update --extensions
+EOF
 
 USER ${USERNAME}
 
 # Install pi-local-models package, supports project level model url
-RUN  /usr/local/bin/pi install npm:pi-local-models
+RUN << EOF
+  /usr/local/bin/pi install npm:pi-local-models
+  /usr/local/bin/pi update --extensions
+EOF
 
 WORKDIR /workspace
 
-CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]
+# CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]
+CMD ["/usr/local/bin/entrypoint.sh","/usr/bin/bash"]
