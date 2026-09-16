@@ -28,7 +28,15 @@ RUN << EOF
   curl -sLO https://github.com/clojure/brew-install/releases/latest/download/linux-install.sh
   chmod +x linux-install.sh
   ./linux-install.sh --prefix /home/${USERNAME}/.local
-  rm -r linux-install.sh
+  rm -f linux-install.sh
+EOF
+
+# Install clojure-lsp
+RUN << EOF
+  curl -sLO https://raw.githubusercontent.com/clojure-lsp/clojure-lsp/master/install
+  chmod +x install
+  ./install --prefix /home/${USERNAME}/.local
+  rm -f install
 EOF
 
 # Install clj-kondo
@@ -47,7 +55,7 @@ RUN << EOF
   rm -f install
 EOF
 
-# Install pi packages: pi-clojure
+# Install pi packages
 RUN << EOF
   /usr/local/bin/pi install npm:pi-clojure
   /usr/local/bin/pi update --extensions

@@ -75,10 +75,36 @@ EOF
 
 USER ${USERNAME}
 
-# Install pi-local-models package, supports project level model url
+# Install pi package(s)
 RUN << EOF
-  /usr/local/bin/pi install npm:pi-local-models
+  /usr/local/bin/pi install npm:pi-mtplx
   /usr/local/bin/pi update --extensions
+EOF
+
+# Setup authorization for access to mtplx
+RUN << EOF
+echo "{
+  \"mtplx\": {
+    \"type\": \"api_key\",
+    \"key\": \"mtplx-local\"
+  }
+}" > /home/${USERNAME}/.pi/agent/auth.json
+EOF
+
+# Setup model entry for access to mtplx
+RUN << EOF
+echo "{
+  \"providers\": {
+    \"mtplx\": {
+      \"api\": \"openai-completions\",
+      \"authHeader\": true,
+      \"baseUrl\": \"http://192.168.64.1:8000/v1\",
+      \"models\": [
+        { \"id\": \"mtplx-qwen38-27b-optimized-quality\" }
+      ]
+    }
+  }
+}" > /home/${USERNAME}/.pi/agent/models.json
 EOF
 
 WORKDIR /workspace
