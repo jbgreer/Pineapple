@@ -3,30 +3,30 @@
 import argparse
 import os
 
-HOST_WORK_DIR="."
-CONTAINER_PI_WORK_DIR="/workspace"
+HOST_WORK_DIR='.'
+CONTAINER_PI_WORK_DIR='/workspace'
 
 def run_container(cpu, mem, hwd, image):
   os.system(f'container run --cap-add CAP_NET_ADMIN -c {cpu} -m {mem} -i -t -v {hwd} {image}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
   parser = argparse.ArgumentParser()
-  parser.add_argument("-c", "--cpus", type=int, help="number of cpus for container")
-  parser.add_argument("-m", "--memory", help="memory for container")
-  parser.add_argument("-w", "--host_work_dir", help="host work directory")
-  parser.add_argument("-i", "--image", help="image tag")
+  parser._action_groups.pop()
+  required = parser.add_argument_group('required arguments')
+  required.add_argument('-i', '--image', required=True, help='image tag')
+  optional = parser.add_argument_group('optional arguments')
+  optional.add_argument('-c', '--cpus', type=int, help='number of cpus for container')
+  optional.add_argument('-m', '--memory', help='memory for container')
+  optional.add_argument('-w', '--host_work_dir', help='host work directory')
   args = parser.parse_args()
 
   # supply defaults for optional arguments
   if args.cpus == None:
     args.cpus = 1
   if args.memory == None:
-    args.memory = "1G"
-  if args.image == None:
-    args.image = "pineapple-base"
+    args.memory = '1G'
   if args.host_work_dir == None:
-    #args.host_work_dir = ".:/workspace"
     args.host_work_dir = HOST_WORK_DIR + ":" + CONTAINER_PI_WORK_DIR
   run_container(args.cpus, args.memory, args.host_work_dir, args.image)
 
