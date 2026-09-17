@@ -1,6 +1,6 @@
 # 2026-07-26 Adapted from https://github.com/jbreer/claude-code-in-apple-container/
 
-FROM pineapple-base:latest
+FROM pineapple-olmx-base:latest
 
 ARG USERNAME=pineapple
 
