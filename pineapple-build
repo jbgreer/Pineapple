@@ -14,7 +14,7 @@ if __name__ == "__main__":
   parser.add_argument("-t", "--tag", help="tag for created image")
   args = parser.parse_args()
   if args.file == None:
-    args.file = "Pineapple-Base-Containerfile"
+    args.file = "pineapple-base-containerfile"
   if args.tag == None:
     args.tag = "pineapple-base"
   build_container(args.file, args.tag)
