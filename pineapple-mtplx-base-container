@@ -12,22 +12,16 @@ USER root
 
 # pi is a rapidly iterating project; refresh the globally
 # installed agent before installing any new extensions
-RUN << EOF
-  /usr/local/bin/pi update
-EOF
+RUN /usr/local/bin/pi update
 
 USER ${USERNAME}
 
 # Update any pi extensions installed in earlier images
 # before installing any new extensions
-RUN << EOF
-  /usr/local/bin/pi update --extensions
-EOF
+RUN /usr/local/bin/pi update --extensions
 
 # Install pi package(s)
-RUN << EOF
-  /usr/local/bin/pi install npm:pi-mtplx
-EOF
+RUN /usr/local/bin/pi install npm:pi-mtplx
 
 # Setup authorization for access to mtplx
 RUN << EOF

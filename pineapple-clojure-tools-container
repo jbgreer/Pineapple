@@ -21,9 +21,7 @@ EOF
 
 # pi is a rapidly iterating project; refresh the globally
 # installed agent before installing any new extensions
-RUN << EOF
-  /usr/local/bin/pi update
-EOF
+RUN /usr/local/bin/pi update
 
 # switch to local user installs
 USER ${USERNAME}
@@ -65,19 +63,13 @@ EOF
 
 # Update any pi extensions installed in earlier images
 # before installing any new extensions
-RUN << EOF
-  /usr/local/bin/pi update --extensions
-EOF
+RUN /usr/local/bin/pi update --extensions
 
 # Install pi-clojure so any agent in this image can
 # interact with the clojure development environment
-RUN << EOF
-  /usr/local/bin/pi install npm:pi-clojure
-EOF
+RUN /usr/local/bin/pi install npm:pi-clojure
 
 # Install cljfmt 
-RUN << EOF
-  clj -Ttools install io.github.weavejester/cljfmt '{:git/tag "0.16.5"}' :as cljfmt
-EOF
+RUN clj -Ttools install io.github.weavejester/cljfmt '{:git/tag "0.16.5"}' :as cljfmt
 
 WORKDIR /workspace

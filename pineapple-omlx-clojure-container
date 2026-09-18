@@ -10,19 +10,13 @@ ARG USERNAME=pineapple
 # installed agent here so rebuilding this leaf image picks up
 # the latest pi without rebuilding the earlier images
 USER root
-RUN << EOF
-  /usr/local/bin/pi update
-EOF
+RUN /usr/local/bin/pi update
 
 USER ${USERNAME}
 
 # Update any pi extensions installed in earlier images
 # before installing any new extensions
-RUN << EOF
-  /usr/local/bin/pi update --extensions
-EOF
+RUN /usr/local/bin/pi update --extensions
 
 # Install pi package(s)
-RUN << EOF
-  /usr/local/bin/pi install npm:pi-local-models
-EOF
+RUN /usr/local/bin/pi install npm:pi-local-models
