@@ -4,6 +4,14 @@ import argparse
 import os
 
 
+def derive_tag(file):
+  basename = os.path.basename(file)
+  suffix = '-containerfile'
+  if basename.endswith(suffix):
+    return basename[: -len(suffix)]
+  return basename
+
+
 def build_container(file, tag):
   os.system(f'container build --file {file} --tag {tag}')
 
@@ -13,6 +21,14 @@ if __name__ == '__main__':
   parser._action_groups.pop()
   required = parser.add_argument_group('required arguments')
   required.add_argument('-f', '--file', required=True, help='name of container file')
-  required.add_argument('-t', '--tag', required=True, help='tag for created image')
+  optional = parser.add_argument_group('optional arguments')
+  optional.add_argument('-t', '--tag',
+                        help='tag for created image (default: filename with -containerfile suffix stripped)')
   args = parser.parse_args()
+
+  if args.tag is None:
+    args.tag = derive_tag(args.file)
+  if args.tag == '':
+    parser.error('-t/--tag must not be empty')
+
   build_container(args.file, args.tag)
