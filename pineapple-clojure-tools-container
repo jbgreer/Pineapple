@@ -19,6 +19,12 @@ RUN << EOF
     maven
 EOF
 
+# pi is a rapidly iterating project; refresh the globally
+# installed agent before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update
+EOF
+
 # switch to local user installs
 USER ${USERNAME}
 WORKDIR /home/${USERNAME}
@@ -57,11 +63,16 @@ RUN << EOF
   rm -f install
 EOF
 
+# Update any pi extensions installed in earlier images
+# before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update --extensions
+EOF
+
 # Install pi-clojure so any agent in this image can
 # interact with the clojure development environment
 RUN << EOF
   /usr/local/bin/pi install npm:pi-clojure
-  /usr/local/bin/pi update --extensions
 EOF
 
 # Install cljfmt 

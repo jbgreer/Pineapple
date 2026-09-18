@@ -2,8 +2,28 @@
 
 FROM pineapple-base:latest
 
+# ARG values do not propagate from the base image, so
+# redeclare the ones used below
+ARG USERNAME=pineapple
+
+# Need to explicitly set to root because of base
+USER root
+
+# pi is a rapidly iterating project; refresh the globally
+# installed agent before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update
+EOF
+
+USER ${USERNAME}
+
+# Update any pi extensions installed in earlier images
+# before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update --extensions
+EOF
+
 # Install pi package(s)
 RUN << EOF
   /usr/local/bin/pi install npm:pi-local-models
-  /usr/local/bin/pi update --extensions
 EOF

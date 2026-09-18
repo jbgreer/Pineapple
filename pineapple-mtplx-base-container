@@ -7,10 +7,26 @@ FROM pineapple-base:latest
 ARG USERNAME=pineapple
 ARG MTPLX_HOST=192.168.64.1
 
+# Need to explicitly set to root because of base
+USER root
+
+# pi is a rapidly iterating project; refresh the globally
+# installed agent before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update
+EOF
+
+USER ${USERNAME}
+
+# Update any pi extensions installed in earlier images
+# before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update --extensions
+EOF
+
 # Install pi package(s)
 RUN << EOF
   /usr/local/bin/pi install npm:pi-mtplx
-  /usr/local/bin/pi update --extensions
 EOF
 
 # Setup authorization for access to mtplx

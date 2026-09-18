@@ -17,10 +17,15 @@ EOF
 
 USER ${USERNAME}
 
+# Update any pi extensions installed in earlier images
+# before installing any new extensions
+RUN << EOF
+  /usr/local/bin/pi update --extensions
+EOF
+
 # Install pi package(s)
 RUN << EOF
   /usr/local/bin/pi install npm:pi-mtplx
-  /usr/local/bin/pi update --extensions
 EOF
 
 # Setup authorization for access to mtplx
