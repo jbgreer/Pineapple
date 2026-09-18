@@ -48,6 +48,9 @@ to the pi-clojure package, just cause I wanted to - don't read anything into it.
    pineapple-build -t my-tag
    ```
 
+   Note this builds the first tier only; see [Container files](#container-files)
+   below for the full build order.
+
 4) Run the container from a project directory. 
    You can either use the helper script or run the command directly.
    Note that the container file invokes a script to set firewall
@@ -69,15 +72,37 @@ to the pi-clojure package, just cause I wanted to - don't read anything into it.
    pineapple-run
    ```
 
-## Container file
+## Container files
 
-Both of the included container files run a firewall configuration script on 
-startup as root using a **sudoer** rule that allows the default user,'
-pineapple, to do this.  They then both run the pi coding agent.
+The container images are built in three tiers, each tier depending on
+the one below it.  Every tier runs a firewall configuration script on
+startup as root using a **sudoer** rule that allows the default user,
+'pineapple', to do this, and then runs the pi coding agent.
 
-The **pineapple-clojure-container** differs in that it also installs
-Clojure and a number of other useful programs and utilities.  
-To use it, you must first build the **pineapple-base** image.
+1. **pineapple-base-container**  —  the shared base:  OS packages and
+   tools, the `pineapple` user, and the global pi coding agent
+   install.  Built first.
+
+2. **pineapple-mtplx-base-container** and
+   **pineapple-omlx-base-container**  —  depend on
+   `pineapple-base` and install their pi packages
+   (`pi-mtplx` and `pi-local-models` respectively).  The mtplx base
+   also sets up auth and model entries for the mtplx model server;
+   the server host is the `MTPLX_HOST` build argument
+   (default `192.168.64.1`).
+
+3. **pineapple-mtplx-clojure-container** and
+   **pineapple-omlx-clojure-container**  —  depend on their matching
+   `-base-container` image and additionally install Clojure and a
+   number of other useful programs and utilities.
+
+To build, build up the tiers in order, e.g.
+
+   ```text
+   pineapple-build -f pineapple-base-container
+   pineapple-build -f pineapple-mtplx-base-container
+   pineapple-build -f pineapple-mtplx-clojure-container
+   ```
 
 ## Credits
 Pi agent harness: https://pi.dev/
