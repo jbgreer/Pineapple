@@ -6,7 +6,7 @@ import os
 
 def derive_tag(file):
   basename = os.path.basename(file)
-  suffix = '-containerfile'
+  suffix = '-container'
   if basename.endswith(suffix):
     return basename[: -len(suffix)]
   return basename
@@ -23,7 +23,7 @@ if __name__ == '__main__':
   required.add_argument('-f', '--file', required=True, help='name of container file')
   optional = parser.add_argument_group('optional arguments')
   optional.add_argument('-t', '--tag',
-                        help='tag for created image (default: filename with -containerfile suffix stripped)')
+                        help='tag for created image (default: filename with -container suffix stripped)')
   args = parser.parse_args()
 
   if args.tag is None:
