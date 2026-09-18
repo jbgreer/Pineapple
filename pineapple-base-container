@@ -69,8 +69,6 @@ EOF
 # Install Pi Coding Agent 
 RUN << EOF
   npm install -g --ignore-scripts @earendil-works/pi-coding-agent
-  /usr/local/bin/pi update
-  /usr/local/bin/pi update --extensions
 EOF
 
 USER ${USERNAME}
