@@ -71,6 +71,10 @@ RUN npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 
 USER ${USERNAME}
 
+# Set git identity for the pineapple user (not root)
+RUN git config --global user.name "Jim Greer" && \
+  git config --global user.email "jbgreer@gmail.com"
+
 WORKDIR /workspace
 
 # CMD ["/usr/local/bin/entrypoint.sh","/usr/local/bin/pi","--session-dir","/workspace/.pi/sessions/"]
